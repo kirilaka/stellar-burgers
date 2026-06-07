@@ -6,29 +6,29 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getOrders } from '../../services/slices/feedSlice';
 import { getIngredients } from '../../services/slices/ingredientsSlice';
-import { getprofileOrders } from '../../services/slices/orderSlice';
-import { getOrderByNumberApi } from '@api';
+import {
+  getOrderByNumberThunk,
+  getprofileOrders
+} from '../../services/slices/orderSlice';
+import { useDispatch } from '../../services/store';
 
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
   const { number } = useParams();
+  const dispatch = useDispatch();
   const feedOrders = useSelector(getOrders);
   const profileOrders = useSelector(getprofileOrders);
   const ingredients = useSelector(getIngredients);
 
-  const [orderData, setOrderData] = useState(
-    [...feedOrders, ...profileOrders].find(
-      (item) => item.number === Number(number)
-    )
+  const orderData = [...feedOrders, ...profileOrders].find(
+    (item) => item.number === Number(number)
   );
 
   useEffect(() => {
     if (!orderData) {
-      getOrderByNumberApi(Number(number)).then((res) => {
-        setOrderData(res.orders[0]);
-      });
+      dispatch(getOrderByNumberThunk(Number(number)));
     }
-  }, [number]);
+  }, [number, orderData, dispatch]);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

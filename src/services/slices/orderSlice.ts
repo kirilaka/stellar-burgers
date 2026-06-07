@@ -1,4 +1,9 @@
-import { getOrdersApi, orderBurgerApi, TNewOrder } from '@api';
+import {
+  getOrderByNumberApi,
+  getOrdersApi,
+  orderBurgerApi,
+  TNewOrder
+} from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 
@@ -18,7 +23,16 @@ export const getOrdersThunk = createAsyncThunk(
   }
 );
 
+export const getOrderByNumberThunk = createAsyncThunk(
+  'order/getOrderByNumber',
+  async (number: number) => {
+    const data = await getOrderByNumberApi(number);
+    return data.orders[0];
+  }
+);
+
 type TOrderState = {
+  orderByNumber: TOrder | null;
   orders: TOrder[];
   order: TNewOrder | null;
   name: string | null;
@@ -27,6 +41,7 @@ type TOrderState = {
 };
 
 const initialState: TOrderState = {
+  orderByNumber: null,
   orders: [],
   order: null,
   name: null,
@@ -46,7 +61,8 @@ export const orderSlice = createSlice({
   selectors: {
     getBurgerOrder: (state) => state.order,
     getprofileOrders: (state) => state.orders,
-    getIsLoading: (state) => state.isLoading
+    getIsLoading: (state) => state.isLoading,
+    getOrderByNumber: (state) => state.orderByNumber
   },
   extraReducers: (builder) => {
     builder
@@ -75,13 +91,30 @@ export const orderSlice = createSlice({
       .addCase(getOrdersThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || 'Ошибка загрузки ингредиентов';
+      })
+
+      .addCase(getOrderByNumberThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getOrderByNumberThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.orderByNumber = action.payload;
+      })
+      .addCase(getOrderByNumberThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || 'Ошибка загрузки ингредиентов';
       });
   }
 });
 
 export default orderSlice.reducer;
 
-export const { getBurgerOrder, getprofileOrders, getIsLoading } =
-  orderSlice.selectors;
+export const {
+  getBurgerOrder,
+  getprofileOrders,
+  getIsLoading,
+  getOrderByNumber
+} = orderSlice.selectors;
 
 export const { clearBurgerOrder } = orderSlice.actions;

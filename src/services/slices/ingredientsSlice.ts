@@ -27,7 +27,13 @@ export const ingredientsSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    getIngredients: (state) => state.ingredients
+    getIngredients: (state) => state.ingredients,
+    getBunIngredients: (state) =>
+      state.ingredients.filter((item) => item.type === 'bun'),
+    getMainIngredients: (state) =>
+      state.ingredients.filter((item) => item.type === 'main'),
+    getSauceIngredients: (state) =>
+      state.ingredients.filter((item) => item.type === 'sauce')
   },
   extraReducers: (builder) => {
     builder
@@ -48,4 +54,9 @@ export const ingredientsSlice = createSlice({
 
 export default ingredientsSlice.reducer;
 
-export const { getIngredients } = ingredientsSlice.selectors;
+export const {
+  getIngredients,
+  getBunIngredients,
+  getMainIngredients,
+  getSauceIngredients
+} = ingredientsSlice.selectors;

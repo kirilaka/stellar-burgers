@@ -27,15 +27,19 @@ export const Profile: FC = () => {
     formValue.email !== user?.email ||
     !!formValue.password;
 
-  const handleSubmit = (e: SyntheticEvent) => {
+  const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(
+    const result = await dispatch(
       updateUserThunk({
         name: formValue.name,
         email: formValue.email,
         ...(formValue.password && { password: formValue.password })
       })
     );
+
+    if (updateUserThunk.fulfilled.match(result)) {
+      setFormValue((prev) => ({ ...prev, password: '' }));
+    }
   };
 
   const handleCancel = (e: SyntheticEvent) => {

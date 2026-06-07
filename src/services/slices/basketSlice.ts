@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TBunIngredient, TIngredient } from '@utils-types';
 import { orderBurgerThunk } from './orderSlice';
+import { v4 as uuidv4 } from 'uuid';
 
 type TbasketState = {
   bun: TBunIngredient | undefined;
-  ingredients: TIngredient[];
+  ingredients: (TIngredient & { id: string })[];
 };
 
 const initialState: TbasketState = {
@@ -16,16 +17,21 @@ export const basketSlice = createSlice({
   name: 'basket',
   initialState,
   reducers: {
-    addIngredient: (state, action: PayloadAction<TIngredient>) => {
-      if (action.payload.type === 'bun') {
-        state.bun = action.payload as TBunIngredient;
-      } else {
-        state.ingredients.push(action.payload);
-      }
+    addIngredient: {
+      reducer: (state, action: PayloadAction<TIngredient & { id: string }>) => {
+        if (action.payload.type === 'bun') {
+          state.bun = action.payload as TBunIngredient;
+        } else {
+          state.ingredients.push(action.payload);
+        }
+      },
+      prepare: (ingredient: TIngredient) => ({
+        payload: { ...ingredient, id: uuidv4() }
+      })
     },
-    removeIngredient: (state, action: PayloadAction<TIngredient>) => {
+    removeIngredient: (state, action: PayloadAction<string>) => {
       const index = state.ingredients.findIndex(
-        (item) => item._id === action.payload._id
+        (item) => item.id === action.payload
       );
       if (index !== -1) {
         state.ingredients.splice(index, 1);
