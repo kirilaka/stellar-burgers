@@ -2,8 +2,10 @@
   background-color: var(--background);
 }
 .menu {
+  position: relative;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   max-width: 1240px;
   height: 56px;
   margin: 0 auto;
@@ -21,6 +23,7 @@
 }
 
 .link_active {
+  text-decoration: none;
   color: var(--text-primary-color);
 }
 
@@ -28,10 +31,16 @@
   display: flex;
   justify-content: flex-end;
   flex-basis: 35%;
+  text-decoration: none;
+}
+
+.link_position_last_unActive { 
+  color: var(--text-inactive-color);
+  text-decoration: none;
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  margin: 0 auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }

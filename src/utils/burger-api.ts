@@ -1,5 +1,5 @@
 import { setCookie, getCookie } from './cookie';
-import { TIngredient, TOrder, TOrdersData, TUser } from './types';
+import { TIngredient, TOrder, TUser } from './types';
 
 const URL = process.env.BURGER_API_URL;
 
@@ -106,7 +106,7 @@ type TOwner = {
   updatedAt: string;
 };
 
-type TNewOrder = {
+export type TNewOrder = {
   _id: string;
   status: string;
   name: string;
@@ -117,7 +117,7 @@ type TNewOrder = {
   price: number;
 };
 
-type TNewOrderResponse = TServerResponse<{
+export type TNewOrderResponse = TServerResponse<{
   order: TNewOrder;
   name: string;
 }>;

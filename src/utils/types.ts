@@ -16,6 +16,10 @@ export type TConstructorIngredient = TIngredient & {
   id: string;
 };
 
+export type TBunIngredient = Omit<TIngredient, 'type'> & {
+  type: 'bun';
+};
+
 export type TOrder = {
   _id: string;
   status: string;
