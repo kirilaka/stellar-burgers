@@ -101,16 +101,17 @@ test.describe('Конструктор бургера', () => {
   test.describe('Создание заказа', () => {
     test('создание заказа', async ({ page }) => {
         await expect(page.getByTestId('modal')).toBeHidden();
+        const constructor = page.getByTestId('burgerConstructor')
 
         const bun = page.getByTestId('Краторная булка N-200i');
         await bun.getByText('Добавить').click();
-        await expect(page.getByText('Краторная булка N-200i (верх)')).toBeVisible();
+        await expect(constructor.getByText('Краторная булка N-200i (верх)')).toBeVisible();
 
         const filling = page.getByTestId('Биокотлета из марсианской Магнолии');
         await filling.getByText('Добавить').click();
-        await expect(page.getByText('Биокотлета из марсианской Магнолии')).toBeVisible();
+        await expect(constructor.getByText('Биокотлета из марсианской Магнолии')).toBeVisible();
 
-        await page.getByTestId('submitButton').click();
+        await constructor.getByTestId('submitButton').click();
 
         await expect(page.getByTestId('modal')).toBeVisible();
         await expect(page.getByTestId('modal').getByText('12345')).toBeVisible()
@@ -118,10 +119,10 @@ test.describe('Конструктор бургера', () => {
         await page.getByTestId('modalButton').click();
         await expect(page.getByTestId('modal')).toBeHidden();
 
-        await expect(page.getByText('Краторная булка N-200i (верх)')).toBeHidden();
-        await expect(page.getByText('Биокотлета из марсианской Магнолии')).toBeHidden();
-        await expect(page.getByText('Выберите начинку')).toBeVisible();
-        await expect(page.getByText('Выберите булки')).toHaveCount(2);
+        await expect(constructor.getByText('Краторная булка N-200i (верх)')).toBeHidden();
+        await expect(constructor.getByText('Биокотлета из марсианской Магнолии')).toBeHidden();
+        await expect(constructor.getByText('Выберите начинку')).toBeVisible();
+        await expect(constructor.getByText('Выберите булки')).toHaveCount(2);
     });
   })
 });
