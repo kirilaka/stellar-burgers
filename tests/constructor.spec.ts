@@ -51,6 +51,8 @@ test.describe('Конструктор бургера', () => {
   });
 
   test('можно добавить ингредиент в конструктор', async ({ page }) => {
+    await expect(page.getByText('Краторная булка N-200i (верх)')).toBeHidden();
+
     const ingredientCard = page.getByTestId('Краторная булка N-200i');
     await ingredientCard.getByText('Добавить').click();
 
@@ -59,15 +61,23 @@ test.describe('Конструктор бургера', () => {
 
   test.describe('Модальное окно', () => {
     test('открывается модалка с деталями ингредиента', async ({ page }) => {
+        await expect(page.getByTestId('modal')).toBeHidden();
+
         await page.getByText('Краторная булка N-200i').click();
 
-        await expect(page.getByTestId('modal')).toBeVisible();
-        await expect(page.getByText('Калории, ккал')).toBeVisible();
+        const modal = page.getByTestId('modal');
+        await expect(modal).toBeVisible();
+        await expect(modal.getByText('Краторная булка N-200i')).toBeVisible();
+        await expect(modal.getByText('420')).toBeVisible();
     });
 
     test('закрывается модалка при клике на кнопку', async ({ page }) => {
+        await expect(page.getByTestId('modal')).toBeHidden();
+
         await page.getByText('Краторная булка N-200i').click();
-        await expect(page.getByTestId('modal')).toBeVisible();
+        const modal = page.getByTestId('modal');
+        await expect(modal).toBeVisible();
+        await expect(modal.getByText('Краторная булка N-200i')).toBeVisible();
 
         await page.getByTestId('modalButton').click()
 
@@ -75,8 +85,12 @@ test.describe('Конструктор бургера', () => {
     });
 
     test('закрывается модалка при клике на оверлей', async ({ page }) => {
+        await expect(page.getByTestId('modal')).toBeHidden();
+
         await page.getByText('Краторная булка N-200i').click();
-        await expect(page.getByTestId('modal')).toBeVisible();
+        const modal = page.getByTestId('modal');
+        await expect(modal).toBeVisible();
+        await expect(modal.getByText('Краторная булка N-200i')).toBeVisible();
 
         await page.getByTestId('modalOverlay').click({ position: { x: 10, y: 10 } });
 
@@ -86,20 +100,26 @@ test.describe('Конструктор бургера', () => {
 
   test.describe('Создание заказа', () => {
     test('создание заказа', async ({ page }) => {
+        await expect(page.getByTestId('modal')).toBeHidden();
+
         const bun = page.getByTestId('Краторная булка N-200i');
         await bun.getByText('Добавить').click();
+        await expect(page.getByText('Краторная булка N-200i (верх)')).toBeVisible();
 
-        const filling = page.getByTestId('Краторная булка N-200i');
+        const filling = page.getByTestId('Биокотлета из марсианской Магнолии');
         await filling.getByText('Добавить').click();
+        await expect(page.getByText('Биокотлета из марсианской Магнолии')).toBeVisible();
 
         await page.getByTestId('submitButton').click();
 
         await expect(page.getByTestId('modal')).toBeVisible();
-        await expect(page.getByText('12345')).toBeVisible();
+        await expect(page.getByTestId('modal').getByText('12345')).toBeVisible()
 
         await page.getByTestId('modalButton').click();
         await expect(page.getByTestId('modal')).toBeHidden();
 
+        await expect(page.getByText('Краторная булка N-200i (верх)')).toBeHidden();
+        await expect(page.getByText('Биокотлета из марсианской Магнолии')).toBeHidden();
         await expect(page.getByText('Выберите начинку')).toBeVisible();
         await expect(page.getByText('Выберите булки')).toHaveCount(2);
     });
