@@ -1,0 +1,24 @@
+{
+  "success": true,
+  "name": "Краторная булка N-200i флюоресцентный бургер",
+  "order": {
+    "_id": "683d069a5c3f7b9001cfa099",
+    "ingredients": [
+      "643d69a5c3f7b9001cfa093c",
+      "643d69a5c3f7b9001cfa0941",
+      "643d69a5c3f7b9001cfa093c"
+    ],
+    "status": "done",
+    "name": "Краторная булка N-200i флюоресцентный бургер",
+    "createdAt": "2026-06-14T10:00:00.000Z",
+    "updatedAt": "2026-06-14T10:00:00.000Z",
+    "number": 12345,
+    "owner": {
+      "name": "Test User",
+      "email": "test@test.ru",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    "price": 2934
+  }
+}

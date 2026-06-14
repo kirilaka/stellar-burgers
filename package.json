@@ -34,6 +34,7 @@
     "@babel/preset-env": "^7.23.6",
     "@babel/preset-react": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
+    "@playwright/test": "^1.60.0",
     "@storybook/addon-essentials": "^7.6.10",
     "@storybook/addon-interactions": "^7.6.10",
     "@storybook/addon-links": "^7.6.10",
@@ -93,11 +94,31 @@
     "build-storybook": "storybook build",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
-    "format": "prettier ./src --write"
+    "format": "prettier ./src --write",
+    "test": "jest",
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright test --reporter=list"
   },
   "eslintConfig": {
     "extends": [
       "plugin:storybook/recommended"
+    ]
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/tests/"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less|scss)$": "identity-obj-proxy",
+      "^@api$": "<rootDir>/src/utils/burger-api.ts",
+      "^@utils-types$": "<rootDir>/src/utils/types.ts"
+    },
+    "testMatch": [
+      "**/*.test.ts",
+      "**/*.test.tsx"
     ]
   }
 }
